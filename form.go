@@ -12,7 +12,7 @@ import (
 )
 
 import (
-	"github.com/lxn/win"
+	"github.com/wangch/win"
 )
 
 type CloseReason byte
@@ -227,6 +227,31 @@ func (fb *FormBase) SetTitle(value string) error {
 }
 
 func (fb *FormBase) Run() int {
+	fb.startingPublisher.Publish()
+
+	var msg win.MSG
+
+	for fb.hWnd != 0 {
+		switch win.GetMessage(&msg, 0, 0, 0) {
+		case 0:
+			return int(msg.WParam)
+
+		case -1:
+			return -1
+		}
+
+		if !win.IsDialogMessage(fb.hWnd, &msg) {
+			win.TranslateMessage(&msg)
+			win.DispatchMessage(&msg)
+		}
+
+		runSynchronized()
+	}
+
+	return 0
+}
+
+func (fb *FormBase) RunDlg() int {
 	fb.startingPublisher.Publish()
 
 	var msg win.MSG

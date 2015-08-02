@@ -10,7 +10,7 @@ import (
 )
 
 import (
-	"github.com/lxn/win"
+	"github.com/wangch/win"
 )
 
 // StatusBar is a widget that displays status messages.

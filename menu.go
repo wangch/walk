@@ -11,7 +11,7 @@ import (
 )
 
 import (
-	"github.com/lxn/win"
+	"github.com/wangch/win"
 )
 
 type Menu struct {
@@ -56,6 +56,10 @@ func NewMenu() (*Menu, error) {
 	m.actions = newActionList(m)
 
 	return m, nil
+}
+
+func (m *Menu) HMenu() win.HMENU {
+	return m.hMenu
 }
 
 func (m *Menu) Dispose() {

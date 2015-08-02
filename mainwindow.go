@@ -9,7 +9,7 @@ import (
 )
 
 import (
-	"github.com/lxn/win"
+	"github.com/wangch/win"
 )
 
 const mainWindowWindowClass = `\o/ Walk_MainWindow_Class \o/`

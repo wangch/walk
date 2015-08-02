@@ -12,8 +12,8 @@ import (
 )
 
 import (
-	"github.com/lxn/walk"
-	. "github.com/lxn/walk/declarative"
+	"github.com/wangch/walk"
+	. "github.com/wangch/walk/declarative"
 )
 
 type Foo struct {

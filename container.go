@@ -9,7 +9,7 @@ import (
 )
 
 import (
-	"github.com/lxn/win"
+	"github.com/wangch/win"
 )
 
 type Margins struct {
@@ -107,6 +107,10 @@ func (cb *ContainerBase) SetEnabled(enabled bool) {
 	cb.WidgetBase.SetEnabled(enabled)
 
 	setDescendantsEnabled(cb.window.(Widget), enabled)
+}
+
+func (cb *ContainerBase) SetChildren(c *WidgetList) {
+	cb.children = c
 }
 
 func (cb *ContainerBase) SetFont(f *Font) {

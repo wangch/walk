@@ -5,7 +5,7 @@
 package walk
 
 import (
-	"github.com/lxn/win"
+	"github.com/wangch/win"
 )
 
 type clickable interface {
@@ -22,6 +22,25 @@ type Button struct {
 	clickedPublisher        EventPublisher
 	textChangedPublisher    EventPublisher
 	image                   Image
+	dbclickPublisher        EventPublisher
+}
+
+func NewButton(parent Container) (*Button, error) {
+	btn := &Button{}
+	if err := InitWidget(
+		btn,
+		parent,
+		"BUTTON",
+		win.WS_TABSTOP|win.WS_VISIBLE,
+		0); err != nil {
+		return nil, err
+	}
+	btn.init()
+	return btn, nil
+}
+
+func (b *Button) DbClicked() *Event {
+	return b.dbclickPublisher.Event()
 }
 
 func (b *Button) init() {
@@ -136,6 +155,9 @@ func (b *Button) WndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr) uint
 		case win.BN_CLICKED:
 			b.raiseClicked()
 		}
+
+	case win.WM_LBUTTONDBLCLK:
+		b.dbclickPublisher.Publish()
 
 	case win.WM_SETTEXT:
 		b.textChangedPublisher.Publish()

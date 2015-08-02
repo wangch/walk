@@ -12,7 +12,7 @@ import (
 )
 
 import (
-	"github.com/lxn/win"
+	"github.com/wangch/win"
 )
 
 func withCompatibleDC(f func(hdc win.HDC) error) error {

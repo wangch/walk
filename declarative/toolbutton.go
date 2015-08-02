@@ -5,7 +5,7 @@
 package declarative
 
 import (
-	"github.com/lxn/walk"
+	"github.com/wangch/walk"
 )
 
 type ToolButton struct {

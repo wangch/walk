@@ -5,7 +5,7 @@
 package walk
 
 import (
-	"github.com/lxn/win"
+	"github.com/wangch/win"
 )
 
 type ToolButton struct {

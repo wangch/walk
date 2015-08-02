@@ -9,7 +9,7 @@ import (
 )
 
 import (
-	"github.com/lxn/win"
+	"github.com/wangch/win"
 )
 
 const groupBoxWindowClass = `\o/ Walk_GroupBox_Class \o/`

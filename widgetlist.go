@@ -5,7 +5,7 @@
 package walk
 
 import (
-	"github.com/lxn/win"
+	"github.com/wangch/win"
 )
 
 type widgetListObserver interface {
@@ -23,6 +23,10 @@ type WidgetList struct {
 }
 
 func newWidgetList(observer widgetListObserver) *WidgetList {
+	return &WidgetList{observer: observer}
+}
+
+func NewWidgetList(observer widgetListObserver) *WidgetList {
 	return &WidgetList{observer: observer}
 }
 

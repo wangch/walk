@@ -10,7 +10,7 @@ import (
 )
 
 import (
-	"github.com/lxn/win"
+	"github.com/wangch/win"
 )
 
 const clipboardWindowClass = `\o/ Walk_Clipboard_Class \o/`

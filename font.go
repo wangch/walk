@@ -9,7 +9,7 @@ import (
 )
 
 import (
-	"github.com/lxn/win"
+	"github.com/wangch/win"
 )
 
 type FontStyle byte
@@ -84,6 +84,10 @@ func NewFont(family string, pointSize int, style FontStyle) (*Font, error) {
 	knownFonts[fi] = font
 
 	return font, nil
+}
+
+func (f *Font) Handle() win.HFONT {
+	return f.handleForDPI(screenDPIY)
 }
 
 func newFontFromLOGFONT(lf *win.LOGFONT, dpi int) (*Font, error) {

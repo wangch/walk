@@ -10,7 +10,7 @@ import (
 )
 
 import (
-	"github.com/lxn/win"
+	"github.com/wangch/win"
 )
 
 // DrawText format flags
@@ -101,12 +101,20 @@ func newCanvasFromHWND(hwnd win.HWND) (*Canvas, error) {
 	return (&Canvas{hdc: hdc, hwnd: hwnd}).init()
 }
 
+func (c *Canvas) Hdc() win.HDC {
+	return c.hdc
+}
+
 func newCanvasFromHDC(hdc win.HDC) (*Canvas, error) {
 	if hdc == 0 {
 		return nil, newError("invalid hdc")
 	}
 
 	return (&Canvas{hdc: hdc, doNotDispose: true}).init()
+}
+
+func NewCanvasFromHDC(hdc win.HDC) (*Canvas, error) {
+	return newCanvasFromHDC(hdc)
 }
 
 func (c *Canvas) init() (*Canvas, error) {
@@ -250,6 +258,20 @@ func (c *Canvas) DrawLine(pen Pen, from, to Point) error {
 	})
 }
 
+func (c *Canvas) polygon(brush Brush, pen Pen, pts []Point) error {
+	return c.withBrushAndPen(brush, pen, func() error {
+		lpPoints := make([]win.POINT, len(pts))
+		for i, pt := range pts {
+			lpPoints[i].X = int32(pt.X)
+			lpPoints[i].Y = int32(pt.Y)
+		}
+		if !win.Polygon(c.hdc, lpPoints) {
+			return newError("Polygon failed")
+		}
+		return nil
+	})
+}
+
 func (c *Canvas) rectangle(brush Brush, pen Pen, bounds Rectangle, sizeCorrection int) error {
 	return c.withBrushAndPen(brush, pen, func() error {
 		if !win.Rectangle_(
@@ -262,6 +284,22 @@ func (c *Canvas) rectangle(brush Brush, pen Pen, bounds Rectangle, sizeCorrectio
 			return newError("Rectangle_ failed")
 		}
 
+		return nil
+	})
+}
+
+func (c *Canvas) roundrectangle(brush Brush, pen Pen, bounds Rectangle, sizeCorrection int, cr int) error {
+	return c.withBrushAndPen(brush, pen, func() error {
+		if !win.RoundRect(
+			c.hdc,
+			bounds.X,
+			bounds.Y,
+			bounds.X+bounds.Width+sizeCorrection,
+			bounds.Y+bounds.Height+sizeCorrection,
+			cr,
+			cr) {
+			return newError("RoundRect failed")
+		}
 		return nil
 	})
 }
@@ -290,6 +328,18 @@ func (c *Canvas) DrawText(text string, font *Font, color Color, bounds Rectangle
 
 		return nil
 	})
+}
+
+func (c *Canvas) FillPolygon(brush Brush, pts []Point) error {
+	return c.polygon(brush, nullPenSingleton, pts)
+}
+
+func (c *Canvas) DrawRoundRect(pen Pen, bounds Rectangle, cr int) error {
+	return c.roundrectangle(nullBrushSingleton, pen, bounds, 0, cr)
+}
+
+func (c *Canvas) FillRoundRect(brush Brush, bounds Rectangle, cr int) error {
+	return c.roundrectangle(brush, nullPenSingleton, bounds, 1, cr)
 }
 
 func (c *Canvas) fontHeight(font *Font) (height int, err error) {
